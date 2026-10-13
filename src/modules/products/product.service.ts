@@ -1,7 +1,7 @@
 import CustomError from "#shared/utils/CustomError.js";
 import { isValidObjectId } from "mongoose";
 import Product from "./product.model.js";
-import type { CreateProductData } from "./product.schema.js";
+import type { CreateProductData, UpdateProductData } from "./product.schema.js";
 import type { IProduct } from "./product.types.js";
 
 export const createProduct = async (
@@ -33,6 +33,26 @@ export const getProductById = async (productId: string): Promise<IProduct> => {
 
   if (!product) {
     throw new CustomError("Product not found", 404);
+  }
+
+  return product.toObject();
+};
+
+export const updateProduct = async (
+  productId: string,
+  productData: UpdateProductData,
+): Promise<IProduct> => {
+  if (!isValidObjectId(productId)) {
+    throw new CustomError("Invalid product ID", 400);
+  }
+
+  const product = await Product.findByIdAndUpdate(productId, productData, {
+    returnDocument: "after",
+    runValidators: true,
+  });
+
+  if (!product) {
+    throw new CustomError("Product not found", 400);
   }
 
   return product.toObject();

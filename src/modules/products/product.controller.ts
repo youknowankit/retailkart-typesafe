@@ -5,6 +5,7 @@ import {
   createProduct,
   getProductById,
   getProducts,
+  updateProduct,
 } from "./product.service.js";
 
 export const createProductController = asyncHandler(async (req, res) => {
@@ -24,4 +25,11 @@ export const getProductByIdController: RequestHandler<{ id: string }> =
     const product = await getProductById(req.params.id);
 
     successResponse(res, "Product fetched successfully", product);
+  });
+
+export const updateProductController: RequestHandler<{ id: string }> =
+  asyncHandler(async (req, res) => {
+    const product = await updateProduct(req.params.id, req.body);
+
+    successResponse(res, "Product updated successfully", product);
   });
