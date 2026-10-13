@@ -51,7 +51,7 @@ export const getCurrentUser = async (userId) => {
     }
     //needed only when we need to manipulate the user
     // const userObject = user.toObject(); //converts to plan JS object from Mongoose Document
-    return user;
+    return toUserResponse(user.toObject());
 };
 export const updateProfile = async (userId, userData) => {
     /*
