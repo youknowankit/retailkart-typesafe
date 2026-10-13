@@ -66,7 +66,7 @@ const userSchema = new Schema({
         type: String,
         trim: true,
     },
-});
+}, { timestamps: true });
 const User = model("User", userSchema);
 export default User;
 //# sourceMappingURL=user.model.js.map

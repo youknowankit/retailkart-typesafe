@@ -31,7 +31,7 @@ export interface IUser {
 //   IUser,
 //   "firstName" | "lastName" | "email" | "password"
 // >;
-export type UserResponse = Omit<IUser, "password">;
+export type UserResponse = Omit<IUser, "password" | "otp" | "otpExpiry">;
 
 // //Login User: zod handles now
 // export interface LoginUserData {
