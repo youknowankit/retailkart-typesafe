@@ -1,4 +1,5 @@
 import CustomError from "#shared/utils/CustomError.js";
+import logger from "#shared/utils/logger.js";
 import type { ErrorRequestHandler } from "express";
 
 //Express provides exclusive type for ErrorMiddleware
@@ -18,7 +19,7 @@ const errorMiddleware: ErrorRequestHandler = (
     return;
   }
 
-  console.error("Unexpected Error:", error);
+  logger.error({ err: error }, "Unexpected Server Error");
 
   res.status(500).json({
     success: false,
