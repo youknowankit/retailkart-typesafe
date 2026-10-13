@@ -3,6 +3,7 @@ import successResponse from "#shared/utils/successResponse.js";
 import type { RequestHandler } from "express";
 import {
   createProduct,
+  deleteProduct,
   getProductById,
   getProducts,
   updateProduct,
@@ -32,4 +33,11 @@ export const updateProductController: RequestHandler<{ id: string }> =
     const product = await updateProduct(req.params.id, req.body);
 
     successResponse(res, "Product updated successfully", product);
+  });
+
+export const deleteProductController: RequestHandler<{ id: string }> =
+  asyncHandler(async (req, res) => {
+    const product = await deleteProduct(req.params.id);
+
+    successResponse(res, "Product deleted successfully", product);
   });

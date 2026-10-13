@@ -38,4 +38,14 @@ export const updateProduct = async (productId, productData) => {
     }
     return product.toObject();
 };
+export const deleteProduct = async (productId) => {
+    if (!isValidObjectId(productId)) {
+        throw new CustomError("Invalid Product ID", 400);
+    }
+    const product = await Product.findByIdAndDelete(productId);
+    if (!product) {
+        throw new CustomError("Product not found", 404);
+    }
+    return product.toObject();
+};
 //# sourceMappingURL=product.service.js.map

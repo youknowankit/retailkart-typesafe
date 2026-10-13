@@ -3,6 +3,7 @@ import { Router } from "express";
 import { createProductSchema, updateProductSchema } from "./product.schema.js";
 import {
   createProductController,
+  deleteProductController,
   getProductByIdController,
   getProductsController,
   updateProductController,
@@ -23,5 +24,6 @@ productRouter.patch(
   validateMiddleware(updateProductSchema),
   updateProductController,
 );
+productRouter.delete("/:id", deleteProductController);
 
 export default productRouter;
