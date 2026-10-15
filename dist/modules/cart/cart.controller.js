@@ -1,13 +1,13 @@
 import asyncHandler from "#shared/utils/asyncHandler.js";
 import CustomError from "#shared/utils/CustomError.js";
 import successResponse from "#shared/utils/successResponse.js";
-import { addToCart, removeCartItem, updateCartItem } from "./cart.service.js";
+import { addToCart, getCart, removeCartItem, updateCartItem, } from "./cart.service.js";
 export const getCartController = asyncHandler(async (req, res) => {
     if (!req.user) {
         throw new CustomError("Authentication Required", 401);
     }
-    const cart = await addToCart(req.user.id, req.body);
-    successResponse(res, "Product added to cart successfully", cart);
+    const cart = await getCart(req.user.id);
+    successResponse(res, "Cart fetched successfully", cart);
 });
 export const addToCartController = asyncHandler(async (req, res) => {
     if (!req.user) {

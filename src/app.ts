@@ -7,6 +7,7 @@ import { pinoHttp } from "pino-http";
 import logger from "#shared/utils/logger.js";
 import authRouter from "#modules/auth/auth.route.js";
 import cartRouter from "#modules/cart/cart.route.js";
+import orderRouter from "#modules/orders/order.route.js";
 
 const app = express();
 
@@ -59,6 +60,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
+app.use("/api/orders", orderRouter);
 
 //Error Middleware
 app.use(errorMiddleware);

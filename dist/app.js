@@ -53,7 +53,7 @@ app.get("/", (_req, res) => {
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
-app.use("/api/carts ", cartRouter);
+app.use("/api/carts", cartRouter);
 //Error Middleware
 app.use(errorMiddleware);
 export default app;
