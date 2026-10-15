@@ -70,3 +70,11 @@ export const createOrder = async (userId: string, data: CreateOrderData) => {
     await session.endSession();
   }
 };
+
+export const getMyOrders = async (userId: string) => {
+  const orders = await Order.find({ user: userId }).sort({
+    createdAt: -1,
+  });
+
+  return orders;
+};

@@ -47,4 +47,10 @@ export const createOrder = async (userId, data) => {
         await session.endSession();
     }
 };
+export const getMyOrders = async (userId) => {
+    const orders = await Order.find({ user: userId }).sort({
+        createdAt: -1,
+    });
+    return orders;
+};
 //# sourceMappingURL=order.service.js.map
