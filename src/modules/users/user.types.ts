@@ -32,13 +32,3 @@ export interface IUser {
 //   "firstName" | "lastName" | "email" | "password"
 // >;
 export type UserResponse = Omit<IUser, "password" | "otp" | "otpExpiry">;
-
-// //Login User: zod handles now
-// export interface LoginUserData {
-//   email: string;
-//   password: string;
-// }
-export interface LoginResponse {
-  user: UserResponse;
-  token: string;
-}
