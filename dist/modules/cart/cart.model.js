@@ -1,0 +1,29 @@
+import { model, Schema } from "mongoose";
+const cartItemSchema = new Schema({
+    product: {
+        type: Schema.Types.ObjectId,
+        ref: "Product",
+        required: true,
+    },
+    quantity: {
+        type: Number,
+        required: true,
+        min: 1,
+        dafault: 1,
+    },
+}, { _id: false });
+const cartSchema = new Schema({
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+        unique: true,
+    },
+    items: {
+        type: [cartItemSchema],
+        dafault: [],
+    },
+}, { timestamps: true });
+const Cart = model("Cart", cartSchema);
+export default Cart;
+//# sourceMappingURL=cart.model.js.map
