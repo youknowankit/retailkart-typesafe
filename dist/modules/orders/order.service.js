@@ -53,4 +53,17 @@ export const getMyOrders = async (userId) => {
     });
     return orders;
 };
+export const getOrderById = async (userId, orderId) => {
+    if (!mongoose.isValidObjectId(orderId)) {
+        throw new CustomError("Invalid order ID", 400);
+    }
+    const order = await Order.findOne({
+        _id: orderId,
+        user: userId,
+    });
+    if (!order) {
+        throw new CustomError("Order not found", 404);
+    }
+    return order;
+};
 //# sourceMappingURL=order.service.js.map

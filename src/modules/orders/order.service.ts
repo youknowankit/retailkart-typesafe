@@ -78,3 +78,20 @@ export const getMyOrders = async (userId: string) => {
 
   return orders;
 };
+
+export const getOrderById = async (userId: string, orderId: string) => {
+  if (!mongoose.isValidObjectId(orderId)) {
+    throw new CustomError("Invalid order ID", 400);
+  }
+
+  const order = await Order.findOne({
+    _id: orderId,
+    user: userId,
+  });
+
+  if (!order) {
+    throw new CustomError("Order not found", 404);
+  }
+
+  return order;
+};
