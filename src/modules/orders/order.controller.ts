@@ -2,7 +2,12 @@ import asyncHandler from "#shared/utils/asyncHandler.js";
 import CustomError from "#shared/utils/CustomError.js";
 import successResponse from "#shared/utils/successResponse.js";
 import type { CreateOrderData } from "./order.schema.js";
-import { createOrder, getMyOrders, getOrderById } from "./order.service.js";
+import {
+  createOrder,
+  getAllOrders,
+  getMyOrders,
+  getOrderById,
+} from "./order.service.js";
 
 export const createOrderController = asyncHandler(async (req, res) => {
   if (!req.user) {
@@ -37,4 +42,10 @@ export const getOrderByIdController = asyncHandler(async (req, res) => {
   const order = await getOrderById(req.user.id, id);
 
   successResponse(res, "Order fetched successfully", order);
+});
+
+export const getAllOrdersController = asyncHandler(async (_req, res) => {
+  const orders = await getAllOrders();
+
+  successResponse(res, "All orders fetched successfully", orders);
 });

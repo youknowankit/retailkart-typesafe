@@ -1,5 +1,6 @@
 export interface TokenPayload {
   id: string;
+  role: "admin" | "user";
 }
 
 import jwt from "jsonwebtoken";

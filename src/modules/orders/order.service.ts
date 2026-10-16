@@ -95,3 +95,11 @@ export const getOrderById = async (userId: string, orderId: string) => {
 
   return order;
 };
+
+export const getAllOrders = async () => {
+  const orders = await Order.find()
+    .populate("user", "firstName lastName email")
+    .sort({ createdAt: -1 });
+
+  return orders;
+};

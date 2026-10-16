@@ -4,9 +4,11 @@ import { Router } from "express";
 import { createOrderSchema } from "./order.schema.js";
 import {
   createOrderController,
+  getAllOrdersController,
   getMyOrdersController,
   getOrderByIdController,
 } from "./order.controller.js";
+import adminMiddleware from "#middlewares/adminMiddleware.js";
 
 const orderRouter = Router();
 
@@ -16,11 +18,12 @@ orderRouter.get("/", getMyOrdersController);
 
 orderRouter.get("/:id", getOrderByIdController);
 
+orderRouter.get("/admin/all", adminMiddleware, getAllOrdersController);
+
 orderRouter.post(
   "/",
   validateMiddleware(createOrderSchema),
   createOrderController,
 );
-
 
 export default orderRouter;

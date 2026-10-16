@@ -63,6 +63,7 @@ export const loginUser = async (
 
   const token = generateToken({
     id: user._id.toString(),
+    role: user.role,
   });
 
   return { user: toUserResponse(user.toObject()), token };
