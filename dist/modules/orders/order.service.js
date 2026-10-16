@@ -72,4 +72,14 @@ export const getAllOrders = async () => {
         .sort({ createdAt: -1 });
     return orders;
 };
+export const updateOrderStatus = async (orderId, data) => {
+    if (!mongoose.isValidObjectId(orderId)) {
+        throw new CustomError("Invalid Order ID", 400);
+    }
+    const order = await Order.findByIdAndUpdate(orderId, { status: data.status }, { returnDocument: "after", runValidators: true });
+    if (!order) {
+        throw new CustomError("Order not found", 404);
+    }
+    return order;
+};
 //# sourceMappingURL=order.service.js.map

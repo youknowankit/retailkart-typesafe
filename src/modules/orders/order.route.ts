@@ -1,12 +1,13 @@
 import authMiddleware from "#middlewares/authMiddleware.js";
 import validateMiddleware from "#middlewares/validateMiddleware.js";
 import { Router } from "express";
-import { createOrderSchema } from "./order.schema.js";
+import { createOrderSchema, updateOrderStatusSchema } from "./order.schema.js";
 import {
   createOrderController,
   getAllOrdersController,
   getMyOrdersController,
   getOrderByIdController,
+  updateOrderStatusController,
 } from "./order.controller.js";
 import adminMiddleware from "#middlewares/adminMiddleware.js";
 
@@ -24,6 +25,13 @@ orderRouter.post(
   "/",
   validateMiddleware(createOrderSchema),
   createOrderController,
+);
+
+orderRouter.patch(
+  "/admin/:id/status",
+  adminMiddleware,
+  validateMiddleware(updateOrderStatusSchema),
+  updateOrderStatusController,
 );
 
 export default orderRouter;

@@ -1,12 +1,13 @@
 import asyncHandler from "#shared/utils/asyncHandler.js";
 import CustomError from "#shared/utils/CustomError.js";
 import successResponse from "#shared/utils/successResponse.js";
-import type { CreateOrderData } from "./order.schema.js";
+import type { CreateOrderData, UpdateOrderStatusData } from "./order.schema.js";
 import {
   createOrder,
   getAllOrders,
   getMyOrders,
   getOrderById,
+  updateOrderStatus,
 } from "./order.service.js";
 
 export const createOrderController = asyncHandler(async (req, res) => {
@@ -48,4 +49,16 @@ export const getAllOrdersController = asyncHandler(async (_req, res) => {
   const orders = await getAllOrders();
 
   successResponse(res, "All orders fetched successfully", orders);
+});
+
+export const updateOrderStatusController = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  if (!id || Array.isArray(id)) {
+    throw new CustomError("Invalid Order ID", 400);
+  }
+
+  const order = await updateOrderStatus(id, req.body as UpdateOrderStatusData);
+
+  successResponse(res, "Order status updated successfully", order);
 });

@@ -2,7 +2,7 @@ import Cart from "#modules/cart/cart.model.js";
 import Product from "#modules/products/product.model.js";
 import CustomError from "#shared/utils/CustomError.js";
 import mongoose from "mongoose";
-import type { CreateOrderData } from "./order.schema.js";
+import type { CreateOrderData, UpdateOrderStatusData } from "./order.schema.js";
 import Order from "./order.model.js";
 import type { IOrderItem } from "./order.types.js";
 
@@ -102,4 +102,25 @@ export const getAllOrders = async () => {
     .sort({ createdAt: -1 });
 
   return orders;
+};
+
+export const updateOrderStatus = async (
+  orderId: string,
+  data: UpdateOrderStatusData,
+) => {
+  if (!mongoose.isValidObjectId(orderId)) {
+    throw new CustomError("Invalid Order ID", 400);
+  }
+
+  const order = await Order.findByIdAndUpdate(
+    orderId,
+    { status: data.status },
+    { returnDocument: "after", runValidators: true },
+  );
+
+  if (!order) {
+    throw new CustomError("Order not found", 404);
+  }
+
+  return order;
 };
