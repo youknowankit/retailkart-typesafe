@@ -48,9 +48,19 @@ const orderSchema = new Schema<IOrder>(
       required: true,
       trim: true,
     },
+    razorpayOrderId: {
+      type: String,
+      default: undefined,
+    },
     paymentId: {
       type: String,
       default: undefined,
+    },
+    paymentStatus: {
+      type: String,
+      enum: ["pending", "paid", "failed", "refunded"],
+      default: "pending",
+      required: true,
     },
     status: {
       type: String,

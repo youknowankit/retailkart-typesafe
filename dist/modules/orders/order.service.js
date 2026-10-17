@@ -3,7 +3,24 @@ import Product from "#modules/products/product.model.js";
 import CustomError from "#shared/utils/CustomError.js";
 import mongoose from "mongoose";
 import Order from "./order.model.js";
-export const createOrder = async (userId, data) => {
+// //Payment -> retuns cart total in rupees w/o creating an order
+// export const calculateCartTotal = async (userId: string) => {
+//   const cart = await Cart.findOne({ user: userId });
+//   if (!cart || cart.items.length === 0) {
+//     throw new CustomError("Cart is empty", 400);
+//   }
+//   let totalAmount = 0;
+//   for (const item of cart.items) {
+//     const product = await Product.findById(item.product);
+//     if (!product) {
+//       throw new CustomError("A product in your cart no longer exists", 404);
+//     }
+//     totalAmount += product.price * item.quantity;
+//   }
+//   return totalAmount;
+// };
+//Helper
+export const getCartOrderDetails = async (userId) => {
     const cart = await Cart.findOne({ user: userId });
     if (!cart || cart.items.length === 0) {
         throw new CustomError("Cart is empty", 400);
@@ -23,6 +40,14 @@ export const createOrder = async (userId, data) => {
         });
         totalAmount += price * item.quantity;
     }
+    return { cart, orderItems, totalAmount };
+};
+export const calculateCartTotal = async (userId) => {
+    const { totalAmount } = await getCartOrderDetails(userId);
+    return totalAmount;
+};
+export const createOrder = async (userId, data) => {
+    const { cart, orderItems, totalAmount } = await getCartOrderDetails(userId);
     const session = await mongoose.startSession();
     try {
         let createdOrder;
@@ -47,6 +72,67 @@ export const createOrder = async (userId, data) => {
         await session.endSession();
     }
 };
+export const createPendingPaymentOrder = async (userId, data, razorpayOrderId, orderItems, totalAmount) => {
+    const pendingOrder = await Order.create({
+        user: userId,
+        items: orderItems,
+        totalAmount,
+        address: data.address,
+        razorpayOrderId,
+        paymentStatus: "pending",
+    });
+    return pendingOrder;
+};
+// export const createOrder = async (userId: string, data: CreateOrderData) => {
+//   const cart = await Cart.findOne({ user: userId });
+//   if (!cart || cart.items.length === 0) {
+//     throw new CustomError("Cart is empty", 400);
+//   }
+//   const orderItems: IOrderItem[] = [];
+//   let totalAmount = 0;
+//   for (const item of cart.items) {
+//     const product = await Product.findById(item.product);
+//     if (!product) {
+//       throw new CustomError("A product in your cart no longer exists", 404);
+//     }
+//     const price = product.price;
+//     orderItems.push({
+//       productId: product._id,
+//       quantity: item.quantity,
+//       price,
+//     });
+//     totalAmount += price * item.quantity;
+//   }
+//   const session = await mongoose.startSession();
+//   try {
+//     let createdOrder;
+//     await session.withTransaction(async () => {
+//       const orders = await Order.create(
+//         [
+//           {
+//             user: userId,
+//             items: orderItems,
+//             totalAmount,
+//             address: data.address,
+//           },
+//         ],
+//         { session },
+//       );
+//       createdOrder = orders[0];
+//       await Cart.updateOne(
+//         { _id: cart._id, user: userId },
+//         { $set: { items: [] } },
+//         { session },
+//       );
+//     });
+//     if (!createdOrder) {
+//       throw new CustomError("Failed to create order", 500);
+//     }
+//     return createdOrder;
+//   } finally {
+//     await session.endSession();
+//   }
+// };
 export const getMyOrders = async (userId) => {
     const orders = await Order.find({ user: userId }).sort({
         createdAt: -1,

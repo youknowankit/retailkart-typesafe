@@ -8,6 +8,7 @@ import logger from "#shared/utils/logger.js";
 import authRouter from "#modules/auth/auth.route.js";
 import cartRouter from "#modules/cart/cart.route.js";
 import orderRouter from "#modules/orders/order.route.js";
+import paymentRouter from "#modules/payments/payment.route.js";
 const app = express();
 //Global Middlewares
 /*Logger-PINO */
@@ -56,6 +57,7 @@ app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api/orders", orderRouter);
+app.use("/api/payments", paymentRouter);
 //Error Middleware
 app.use(errorMiddleware);
 export default app;
